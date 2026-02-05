@@ -32,11 +32,12 @@ async function main() {
   console.log(`Created ${projectName}/`);
 
   // Prompt for PROJECT.md
-  console.log('\nLet\'s set up your PROJECT.md:\n');
+  console.log('\nLet\'s set up your PROJECT.md.\n');
+  console.log('Be descriptive - the more detail you provide, the better the agent will understand what to build.\n');
 
-  const description = await ask('What are you building? ');
-  const constraints = await ask('Any constraints or requirements? ');
-  const goals = await ask('Goals? (what does success look like) ');
+  const description = await ask('What are you building? (describe in a few sentences)\n> ');
+  const constraints = await ask('\nAny constraints or requirements? (tech choices, things to avoid, etc.)\n> ');
+  const goals = await ask('\nGoals? (how will the agent know it\'s done?)\n> ');
 
   const projectMd = `# Project
 
