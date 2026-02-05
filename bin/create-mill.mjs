@@ -12,7 +12,29 @@ const templateDir = path.join(__dirname, '..', 'template');
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 const ask = (q) => new Promise((resolve) => rl.question(q, resolve));
 
+function commandExists(cmd) {
+  try {
+    execSync(`which ${cmd}`, { stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function main() {
+  // Check for required CLIs
+  if (!commandExists('gh')) {
+    console.error('Error: GitHub CLI (gh) is required but not installed.');
+    console.error('Install it from: https://cli.github.com/');
+    process.exit(1);
+  }
+
+  if (!commandExists('claude')) {
+    console.error('Error: Claude Code CLI is required but not installed.');
+    console.error('Install: curl -fsSL https://claude.ai/install.sh | bash');
+    console.error('Or see: https://code.claude.com/docs/en/quickstart');
+    process.exit(1);
+  }
   const projectName = process.argv[2];
 
   if (!projectName) {
@@ -72,6 +94,9 @@ ${goals ? `- ${goals}` : '- <!-- What does success look like? When these are met
 
       execSync(`gh repo create ${name} --public --source=. --push`, { stdio: 'inherit' });
 
+      // Get the full owner/repo format
+      const repoFullName = execSync('gh repo view --json nameWithOwner -q .nameWithOwner', { encoding: 'utf8' }).trim();
+
       console.log('\nAuthentication options:');
       console.log('  1. Claude Pro/Max subscription: run "claude setup-token" then add CLAUDE_CODE_OAUTH_TOKEN');
       console.log('  2. API key (pay-as-you-go): add ANTHROPIC_API_KEY\n');
@@ -80,15 +105,16 @@ ${goals ? `- ${goals}` : '- <!-- What does success look like? When these are met
       if (authChoice === '1') {
         console.log('\nTo set up subscription auth:');
         console.log('  1. Run: claude setup-token');
-        console.log(`  2. Run: gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo ${name}`);
+        console.log(`  2. Run: gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo ${repoFullName}`);
         console.log('  3. Paste the token when prompted');
       } else if (authChoice === '2') {
         console.log('\nPaste your API key:');
-        execSync(`gh secret set ANTHROPIC_API_KEY --repo ${name}`, { stdio: 'inherit' });
+        execSync(`gh secret set ANTHROPIC_API_KEY --repo ${repoFullName}`, { stdio: 'inherit' });
       }
 
       console.log('\nThen enable the mill workflow:');
-      console.log(`  gh workflow enable mill.yml --repo ${name}`);
+      console.log(`  gh workflow enable mill.yml --repo ${repoFullName}`);
+      console.log(`  gh workflow run mill.yml --repo ${repoFullName}  # optional: trigger immediately`);
       console.log('\nOr go to Actions > mill > Enable workflow');
 
     } catch (err) {

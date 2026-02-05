@@ -40,7 +40,9 @@ Go to **Actions > mill > Enable workflow**, or run:
 gh workflow enable mill.yml
 ```
 
-The mill will start running every 5 minutes.
+The mill runs every 5 minutes. After enabling, you can either:
+- Wait for the next scheduled run (up to 5 minutes)
+- Trigger it manually: `gh workflow run mill.yml`
 
 ## Stopping the mill
 
