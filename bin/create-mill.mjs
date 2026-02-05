@@ -78,13 +78,16 @@ ${goals ? `- ${goals}` : '- <!-- What does success look like? When these are met
 
       const authChoice = await ask('Set up auth now? (1=subscription, 2=api key, n=skip) ');
       if (authChoice === '1') {
-        console.log('\nRun "claude setup-token" to generate a token, then paste it:\n');
-        execSync(`gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo ${name}`, { stdio: 'inherit' });
+        console.log('\nTo set up subscription auth:');
+        console.log('  1. Run: claude setup-token');
+        console.log(`  2. Run: gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo ${name}`);
+        console.log('  3. Paste the token when prompted');
       } else if (authChoice === '2') {
+        console.log('\nPaste your API key:');
         execSync(`gh secret set ANTHROPIC_API_KEY --repo ${name}`, { stdio: 'inherit' });
       }
 
-      console.log('\nEnable the mill workflow:');
+      console.log('\nThen enable the mill workflow:');
       console.log(`  gh workflow enable mill.yml --repo ${name}`);
       console.log('\nOr go to Actions > mill > Enable workflow');
 
