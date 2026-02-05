@@ -1,5 +1,7 @@
 # create-mill
 
+[![npm version](https://img.shields.io/npm/v/create-mill.svg)](https://www.npmjs.com/package/create-mill)
+
 A generator for self-building repos. Answer some questions, push to GitHub, and let the agent build your project.
 
 ## How it works
