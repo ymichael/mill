@@ -63,8 +63,10 @@ Re-enable the workflow via mill-control.
 ### Workflow not running
 
 Scheduled workflows don't trigger immediately after pushing. Either:
-- Wait up to 5 minutes for the next cron window
+- Wait for the next cron window (every 5 minutes)
 - Trigger manually: `gh workflow run mill.yml`
+
+Note: GitHub's scheduled workflows can be delayed 10+ minutes during high load periods. This is normal. If you don't want to wait, trigger manually.
 
 Also check that the workflow is enabled:
 ```bash
