@@ -21,24 +21,40 @@ npx create-mill my-project
 │    ↓                                            │
 │  another run in progress? → exit                │
 │    ↓                                            │
-│  .mill/done exists? → exit                      │
-│    ↓                                            │
 │  .mill/initialized exists?                      │
 │    no  → bootstrap prompt (create structure)    │
 │    yes → iterate prompt (improve/extend)        │
 │    ↓                                            │
 │  claude runs, commits to main                   │
 │    ↓                                            │
-│  agent decides it's done? → create .mill/done   │
+│  agent decides it's done? → disables workflow   │
 └─────────────────────────────────────────────────┘
 ```
 
 ## Stopping the mill
 
 - Use the `mill-control` workflow to disable/enable
-- Or: commit a `.mill/done` file
-- Or: let the agent decide it's complete
+- Or: let the agent decide it's complete (it will disable the workflow)
 
 ## Status
 
 Early development. See [TODO.md](./TODO.md).
+
+## Development
+
+```bash
+# Install dependencies (none currently)
+npm install
+
+# Link locally to test
+npm link
+
+# Test the CLI
+create-mill test-project
+
+# Unlink when done
+npm unlink -g create-mill
+
+# Publish to npm
+npm publish
+```
