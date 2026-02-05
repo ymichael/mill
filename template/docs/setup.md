@@ -57,3 +57,44 @@ When the agent completes all goals in PROJECT.md, it will disable the workflow i
 ## Resuming
 
 Re-enable the workflow via mill-control.
+
+## Troubleshooting
+
+### Workflow not running
+
+Scheduled workflows don't trigger immediately after pushing. Either:
+- Wait up to 5 minutes for the next cron window
+- Trigger manually: `gh workflow run mill.yml`
+
+Also check that the workflow is enabled:
+```bash
+gh workflow list
+```
+
+### Authentication errors
+
+If the agent fails with auth errors:
+1. Check that your secret is set: `gh secret list`
+2. For subscription tokens, they may expire - regenerate with `claude setup-token`
+3. For API keys, verify the key is valid at [console.anthropic.com](https://console.anthropic.com/)
+
+### Agent not making commits
+
+Check the workflow run logs:
+```bash
+gh run list
+gh run view <run-id> --log
+```
+
+Common causes:
+- Agent decided there's nothing to do (check `.mill/JOURNAL.md` for notes)
+- Git push failed (check permissions)
+- Agent hit an error (check logs)
+
+### Workflow keeps running but nothing happens
+
+The agent may be stuck. Check `.mill/TODO.md` and `.mill/JOURNAL.md` in the repo to see what it's thinking. You can edit these files to give it guidance.
+
+### Need to start over
+
+Delete `.mill/initialized` to trigger bootstrap mode again, or disable the workflow and start fresh.
