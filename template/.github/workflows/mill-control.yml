@@ -1,0 +1,32 @@
+name: mill-control
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Enable or disable the mill'
+        required: true
+        default: 'disable'
+        type: choice
+        options:
+          - disable
+          - enable
+
+jobs:
+  control:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disable mill
+        if: inputs.action == 'disable'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow disable mill.yml --repo ${{ github.repository }}
+
+      - name: Enable mill
+        if: inputs.action == 'enable'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow enable mill.yml --repo ${{ github.repository }}
+
+      - name: Confirm
+        run: echo "Mill workflow ${{ inputs.action }}d."

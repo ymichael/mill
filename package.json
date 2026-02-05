@@ -1,0 +1,26 @@
+{
+  "name": "create-mill",
+  "version": "0.1.0",
+  "description": "A generator for self-building repos",
+  "type": "module",
+  "bin": {
+    "create-mill": "./bin/create-mill.mjs"
+  },
+  "files": [
+    "bin",
+    "template"
+  ],
+  "keywords": [
+    "ai",
+    "claude",
+    "codegen",
+    "generator",
+    "github-actions"
+  ],
+  "author": "ymichael",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ymichael/mill.git"
+  }
+}
